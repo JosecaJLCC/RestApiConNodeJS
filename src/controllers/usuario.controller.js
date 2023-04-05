@@ -12,6 +12,21 @@ const getUsuarios = async(req, res)=>{
     }
 }
 
+const postUsuarioPrueba = async (req, res)=>{
+    try{
+        const {usuario, contrasenia}=req.body;
+        const response = await pool.query('select cuenta, password from usuario where cuenta=$1, password=$2',[usuario, contrasenia]);
+        console.log(response);
+        res.json({
+            message:'Se hizo la conexion para el login de usuario',
+            
+        })
+    }
+    catch(e){
+        console.log('El error que tenemos es en login usuario es: '+e)
+    }
+}
+/*
 const getUsuarioCompleto = async(req, res)=>{
     try{
         const id_usuario=req.params.id_usuario;
@@ -22,14 +37,11 @@ const getUsuarioCompleto = async(req, res)=>{
     catch(e){
         console.log('El error que tenemos en usuario es: '+e)
     }
-}
+}*/
 
 const createUsuario = async(req, res)=>{
     try{
-        var id_usuario;
         const {cuenta, password, ci, id_rol}=req.body;
-        //insert into usuario(cuenta, password, ci, id_rol)
-        //values('informaticajlcc@gmail.com', 'informatica','12796720LP', 1)
         const response = await pool.query('insert into usuario(cuenta, password, ci, id_rol) values($1, $2, $3, $4)',
         [  cuenta,
             password,
@@ -40,11 +52,9 @@ const createUsuario = async(req, res)=>{
         res.json({
             message:'usuario agregada exitosamente',
             body:{
-            usuario:{cuenta,password, ci, id_rol}
-            
+            usuario:{cuenta,password, ci, id_rol}       
             }
         })
-        
     }
 
     catch(e){
@@ -96,9 +106,10 @@ const updateUsuario = async(req, res) => {
 
 module.exports={
     getUsuarios,
-    getUsuarioCompleto,
+    //getUsuarioCompleto,
     createUsuario,
-    //getUsuarioByid_usuario,
+    getUsuarioByid_usuario,
     deleteUsuario,
-    updateUsuario
+    updateUsuario,
+    postUsuarioPrueba
 }
