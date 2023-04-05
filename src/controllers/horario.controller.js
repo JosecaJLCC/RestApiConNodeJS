@@ -3,57 +3,61 @@ const pool = require("..");
 
 const getHorario = async(req, res)=>{
     try{
-        const response=await pool.query('select * from Horario');
+        const response=await pool.query('select * from horario');
         //console.log(response.rows);
         res.status(200).json(response.rows);
     }
     catch(e){
-        console.log('El error que tenemos es: '+e)
+        console.log('El error que tenemos en horario es: '+e)
     }
 }
 
 const createHorario = async(req, res)=>{
-    const {idHorario, horaIni, horaFin, idEvento}=req.body;
-    const response = await pool.query('insert into Horario(idHorario, horaIni, horaFin, idEvento) values($1, $2, $3, $4)', [idHorario, horaIni, horaFin, idEvento]);
+    const {fechaini, fechafin, horaini, horafin, id_evento, id_ambiente}=req.body;
+    const response = await pool.query('insert into horario(fechaini, fechafin, horaini, horafin, id_evento, id_ambiente) values($1, $2, $3, $4, $5, $6)', 
+    [fechaini, fechafin, horaini, horafin, id_evento, id_ambiente]);
     
     console.log(response);
     res.json({
         message:'Horario agregado exitosamente',
         body:{
-           Horario:{idHorario, horaIni, horaFin, idEvento}
+           Horario:{fechaini, fechafin, horaini, horafin, id_evento, id_ambiente}
         }
     });
 }
 
-const getHorarioByidHorario = async(req, res) => {
-    const idHorario=req.params.idHorario;
-    const response =await pool.query('select * from Horario where idHorario=$1', [idHorario])
+const getHorarioByid_horario = async(req, res) => {
+    const id_horario=req.params.id_horario;
+    const response =await pool.query('select * from horario where id_horario=$1', [id_horario])
     res.json(response.rows);
 }
 
 const deleteHorario = async(req, res) => {
-    const idHorario=req.params.idHorario;
-    const response = await pool.query('delete from Horario where idHorario=$1',[idHorario])
+    const id_horario=req.params.id_horario;
+    const response = await pool.query('delete from horario where id_horario=$1',[id_horario])
     console.log(response);
-    res.json(`El Horario ${idHorario} a sido eliminado`);
+    res.json(`El Horario con id ${id_horario} ha sido eliminado`);
 }
 
 const updateHorario = async(req, res) => {
-    const idHorario=req.params.idHorario;
-    const {horaIni, horaFin, idEvento}=req.body;
-    const response = await pool.query('update Horario set horaIni=$1,horaFin=$2, idEvento=$3 where idHorario=$4',[
+    const id_horario=req.params.id_horario;
+    const {fechaini, fechafin, horaIni, horaFin, id_evento, id_ambiente}=req.body;
+    const response = await pool.query('update horario set fechaini=$1, fechafin=$2, horaIni=$3, horaFin=$4, id_evento=$5, id_ambiente=$6 where id_horario=$7',[
+        fechaini,
+        fechafin,
         horaIni,
         horaFin,
-        idEvento
+        id_evento,
+        id_ambiente
     ])
     console.log(response);
-    res.json(`Los datos del Horario con ${idHorario} ha sido actualizado`);
+    res.json(`Los datos del Horario con ${id_horario} ha sido actualizado`);
 }
 
 module.exports={
     getHorario,
     createHorario,
-    getHorarioByidHorario,
+    getHorarioByid_horario,
     deleteHorario,
     updateHorario
 }

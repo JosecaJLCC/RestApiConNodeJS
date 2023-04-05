@@ -28,10 +28,11 @@ app.use(express.urlencoded({extended: false}));
 
 //rutas
 app.use(require('./routes/persona'));
-//app.use(require('./routes/evento'));
-//app.use(require('./routes/horario'));
+app.use(require('./routes/evento'));
+app.use(require('./routes/horario'));
 app.use(require('./routes/rol'));
 app.use(require('./routes/usuario'));
+app.use(require('./routes/ambiente'))
 
 app.listen(3000);
 console.log("El servidor esta en el puerto 3000");

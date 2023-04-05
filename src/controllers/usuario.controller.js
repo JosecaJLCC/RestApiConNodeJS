@@ -12,6 +12,18 @@ const getUsuarios = async(req, res)=>{
     }
 }
 
+const getUsuarioCompleto = async(req, res)=>{
+    try{
+        const id_usuario=req.params.id_usuario;
+        //const id_rol=req.params.id_rol;
+        const response=await pool.query('select * from usuario xu, persona xp, rol xr where xu.id_usuario=$1 and xp.ci=xu.ci and xr.id_rol=xu.id_rol',[id_usuario])
+        res.json(response.rows);
+    }
+    catch(e){
+        console.log('El error que tenemos en usuario es: '+e)
+    }
+}
+
 const createUsuario = async(req, res)=>{
     try{
         var id_usuario;
@@ -84,8 +96,9 @@ const updateUsuario = async(req, res) => {
 
 module.exports={
     getUsuarios,
+    getUsuarioCompleto,
     createUsuario,
-    getUsuarioByid_usuario,
+    //getUsuarioByid_usuario,
     deleteUsuario,
     updateUsuario
 }

@@ -8,55 +8,53 @@ const getEventos = async(req, res)=>{
         res.status(200).json(response.rows);
     }
     catch(e){
-        console.log('El error que tenemos es: '+e)
+        console.log('El error que tenemos en Evento es: '+e)
     }
 }
 
 const createEvento = async(req, res)=>{
-    const {nombre,tipoevento,descripcion,fechaevento, idambiente}=req.body;
-    const response = await pool.query('insert into evento(nombre,tipoevento,descripcion,fechaevento, idambiente) values($1, $2, $3, $4, $5)', [nombre,tipoevento,descripcion,fechaevento, idambiente]);
+    const {nombre,tipoevento,descripcion}=req.body;
+    const response = await pool.query('insert into evento(nombre,tipoevento,descripcion) values($1, $2, $3)', [nombre,tipoevento,descripcion]);
     
     console.log(response);
     res.json({
-        message:'evento agregada exitosamente',
+        message:'Evento agregado exitosamente',
         body:{
-           evento:{nombre,tipoevento,descripcion,fechaevento, idambiente}
+           evento:{nombre,tipoevento,descripcion}
         }
     });
 }
 
-const getEventosByidEvento = async(req, res) => {
-    const idEvento=req.params.idEvento;
-    const response =await pool.query('select * from evento where idEvento=$1', [idEvento])
+const getEventoByid_evento = async(req, res) => {
+    const id_evento=req.params.id_evento;
+    const response =await pool.query('select * from evento where id_evento=$1', [id_evento])
     res.json(response.rows);
 }
 
 const deleteEvento = async(req, res) => {
-    const idEvento=req.params.idEvento;
-    const response = await pool.query('delete from evento where idEvento=$1',[idEvento])
+    const id_evento=req.params.id_evento;
+    const response = await pool.query('delete from evento where id_evento=$1',[id_evento])
     console.log(response);
-    res.json(`El evento ${idEvento} a sido eliminado`);
+    res.json(`El evento ${id_evento} ha sido eliminado`);
 }
 
 const updateEvento = async(req, res) => {
-    const idEvento=req.params.idEvento;
-    const {nombre,tipoevento,descripcion,fechaevento, idambiente}=req.body;
-    const response = await pool.query('update evento set nombre=$1,tipoevento=$2, descripcion=$3, fechaevento=$4, idAmbiente=$5 where idEvento=$6',[
+    const id_evento=req.params.id_evento;
+    const {nombre,tipoevento,descripcion}=req.body;
+    const response = await pool.query('update evento set nombre=$1,tipoevento=$2, descripcion=$3 where id_evento=$4',[
         nombre,
         tipoevento,
         descripcion,
-        fechaevento, 
-        idambiente,
-        idEvento
+        id_evento
     ])
     console.log(response);
-    res.json(`Los datos del evento con ${idEvento} ha sido actualizado`);
+    res.json(`Los datos del evento con ${id_evento} ha sido actualizado`);
 }
 
 module.exports={
     getEventos,
     createEvento,
-    getEventosByidEvento,
+    getEventoByid_evento,
     deleteEvento,
     updateEvento
 }
